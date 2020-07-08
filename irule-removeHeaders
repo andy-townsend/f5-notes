@@ -1,0 +1,6 @@
+when HTTP_RESPONSE {  
+  HTTP::header replace “X-Frame-Options” SAMEORIGIN 
+  foreach header {Server X-Powered-By X-AspNetMvc-Version X-AspNet-Version} { 
+    HTTP::header remove $header 
+  }   
+} 
