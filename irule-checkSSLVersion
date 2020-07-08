@@ -1,0 +1,21 @@
+when HTTP_REQUEST { 
+  switch -glob [SSL::cipher version] { 
+    "TLSv1.2" { 
+       set ifileContent [ifile get "iFile_maintenance"] 
+       HTTP::respond 200 content $ifileContent 
+       unset ifileContent 
+    } 
+
+    default { 
+     # When browser cannot negotiate at least TLSv1.2, redirect to an informational error page. 
+     # Set cache control headers to prevent proxies from caching the response. 
+
+     set ifileContent [ifile get "iFile_weak_ciphers"] 
+     HTTP::respond 200 content $ifileContent 
+     unset ifileContent 
+
+     # Log details of the SSL handshake and browser user-agent 
+     log local0. "[IP::client_addr]:[TCP::client_port]: \[SSL::cipher version\]: [SSL::cipher version],\[SSL::cipher name\]: [SSL::cipher name], \[SSL::cipher bits\]: [SSL::cipher bits],U-A: [HTTP::header User-Agent]" 
+    } 
+  } 
+}  
