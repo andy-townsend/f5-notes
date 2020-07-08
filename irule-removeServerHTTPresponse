@@ -1,0 +1,9 @@
+when HTTP_RESPONSE {  
+
+  HTTP::header remove Server 
+  foreach header_name [HTTP::header names]  { 
+    if {[string match -nocase x-* $header_name]} {  
+      HTTP::header remove $header_name 
+    }  
+  }  
+}  
