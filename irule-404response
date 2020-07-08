@@ -1,0 +1,7 @@
+when HTTP_RESPONSE { 
+  if { [HTTP::status] == 404 } { 
+      set ifileContent [ifile get "iFile_404"] 
+      HTTP::respond 200 content $ifileContent 
+      unset ifileContent 
+  } 
+} 
