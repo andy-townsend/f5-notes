@@ -1,0 +1,10 @@
+when HTTP_REQUEST {  
+  if { [class match [IP::client_addr] equals allpay_address_range]}{ 
+     log local0. "Trusted IP ([IP::client_addr]) attempting to access ([HTTP::uri])"  
+  } else {  
+      # Retrieve the file contents, send it in an HTTP 200 response and clear the temporary variable 
+      set ifileContent [ifile get "iFile_maintenance"] 
+      HTTP::respond 200 content $ifileContent 
+      unset ifileContent 
+  }   
+} 
